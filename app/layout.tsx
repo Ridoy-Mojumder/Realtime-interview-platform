@@ -7,11 +7,6 @@ const monaSans = Mona_Sans({
   subsets: ["latin"],
 });
 
-const monaMono = Mona_Sans({
-  variable: "--font-mona-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Realtime Interview Platform",
   description: "A platform for conducting and practicing realtime interviews with AI integration.",
@@ -25,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${monaSans.variable} ${monaMono.variable} antialiased`}
+        className={`${monaSans.variable}  antialiased pattern`}
       >
         {children}
       </body>
