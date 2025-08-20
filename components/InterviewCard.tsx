@@ -7,14 +7,10 @@ import Link from "next/link";
 import DisplayTechIcons from "./DisplayTechIcons";
 
 const InterviewCard = ({
-  id,
-  userId,
+  interviewId,
   role,
   type,
   techstack,
-  level,
-  questions,
-  finalized,
   createdAt,
 }: InterviewCardProps) => {
   const feedback = null as Feedback | null;
@@ -38,7 +34,7 @@ const InterviewCard = ({
           className="rounded-full object-fit size-[90px]"
         />
 
-        <h3 className=" capitalize">{role} developer</h3>
+        <h3 className=" capitalize">{role} developer {normalizedType}</h3>
 
         <div className="flex flex-row gap-5 ">
           <div className="flex flex-row gap-2">
@@ -63,7 +59,7 @@ const InterviewCard = ({
           <DisplayTechIcons techStack={techstack} />
           <Button className="btn-primary">
             <Link
-              href={feedback ? `/interview/${id}/feedback` : `/interview/${id}`}
+              href={feedback ? `/interview/${interviewId}/feedback` : `/interview/${interviewId}`}
             >
               {feedback ? "Check Feedback" : "View Interview"}
             </Link>
