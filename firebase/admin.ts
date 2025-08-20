@@ -3,7 +3,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const initFirebaseAdmin = () => {
-    const app = getApps();
+    const apps = getApps();
 
     if(!apps.length)
     {

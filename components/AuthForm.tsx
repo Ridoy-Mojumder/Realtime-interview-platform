@@ -8,7 +8,6 @@ import { Form } from "@/components/ui/form";
 import Image from "next/image";
 import Link from "next/link";
 import FormField from "./FormField";
-import { useRouter } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -16,15 +15,13 @@ import {
 import { auth } from "@/firebase/client";
 import { signIn, signUp } from "@/lib/actions/auth.action";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const authFormSchema = (type: FormType) => {
   return z.object({
-    fullName: type === "sign-up" ? z.string().min(3) : z.string().optional(),
+    name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
     email: z.string().email(),
     password: z.string().min(6),
-    profilePicture:
-      type === "sign-up" ? z.string().min(3) : z.string().optional(),
-    resume: type === "sign-up" ? z.string().min(3) : z.string().optional(),
   });
 };
 
@@ -36,16 +33,14 @@ function AuthForm({ type }: { type: FormType }) {
     defaultValues: {
       email: "",
       password: "",
-      fullName: "",
-      profilePicture: "",
-      resume: "",
+      name: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "sign-up") {
-        const { fullName, email, password } = values;
+        const { name, email, password } = values;
 
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -55,10 +50,12 @@ function AuthForm({ type }: { type: FormType }) {
 
         const result = await signUp({
           uid: userCredential.user.uid,
-          name: fullName!,
+          name: name!,
           email,
           password,
         });
+
+         console.log("signUp result", result);
 
         if (!result?.success) {
           toast.error(result?.message);
@@ -67,6 +64,7 @@ function AuthForm({ type }: { type: FormType }) {
 
         toast.success("Sign Up Successful! Please sign in.");
         router.push("/sign-in");
+
         console.log("Sign Up", values);
       } else {
         const { email, password } = values;
@@ -88,6 +86,7 @@ function AuthForm({ type }: { type: FormType }) {
 
         toast.success("Sign In Successful!");
         router.push("/");
+
         console.log("Sign In", values);
       }
     } catch (error) {
@@ -115,7 +114,7 @@ function AuthForm({ type }: { type: FormType }) {
               {!isSignIn && (
                 <FormField
                   control={form.control}
-                  name="fullName"
+                  name="name"
                   label="Full Name"
                   placeholder="Enter your full name"
                 />
@@ -134,24 +133,7 @@ function AuthForm({ type }: { type: FormType }) {
                 type="password"
                 placeholder="Enter your password"
               />
-              {!isSignIn && (
-                <FormField
-                  control={form.control}
-                  name="profilePicture"
-                  label="Profile Picture"
-                  type="file"
-                  placeholder="Enter your profile picture URL"
-                />
-              )}
-              {!isSignIn && (
-                <FormField
-                  control={form.control}
-                  name="resume"
-                  label="Resume"
-                  type="file"
-                  placeholder="Enter your resume URL"
-                />
-              )}
+
               <Button type="submit">{isSignIn ? "Sign In" : "Sign Up"}</Button>
             </form>
           </Form>

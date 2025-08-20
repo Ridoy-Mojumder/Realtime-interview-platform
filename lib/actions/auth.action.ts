@@ -8,8 +8,11 @@ const ONE_WEEK = 60 * 60 * 24 * 7;
 export async function signUp(params: SignUpParams) {
   const { uid, name, email } = params;
 
+  console.log("Signing up user:", { uid, name, email }); 
+
   try {
     const userRecord = await db.collection("users").doc(uid).get();
+    console.log("User Record:", userRecord.exists);
 
     if (userRecord.exists) {
       return {
